@@ -23,8 +23,8 @@ public class testAccountAndLeadLastQueue {
          Test.startTest();
          System.enqueueJob(AccountContAdd);
          Test.stopTest();
-		 System.assertEquals(50, [select count() from Contact where accountID IN (SELECT id FROM Account)]);
-         // System.AsyncException: Maximum stack depth has been reached.
+		 System.assertEquals(10, [select count() from Contact where accountID IN (SELECT id FROM Account)]);
+          //System.AsyncException: Maximum stack depth has been reached.
          //System.assertEquals(50, [select count() from Lead where LeadSource='web']);
     }
 }

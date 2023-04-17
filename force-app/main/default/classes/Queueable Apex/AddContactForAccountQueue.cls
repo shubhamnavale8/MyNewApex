@@ -15,6 +15,6 @@ public class AddContactForAccountQueue implements Queueable {
              insert lstContact;
          }
         //System.AsyncException: Maximum stack depth has been reached.
-        System.enqueueJob(new LeadSourceUpdateQueue());
+        //System.enqueueJob(new LeadSourceUpdateQueue());
     }
 }
