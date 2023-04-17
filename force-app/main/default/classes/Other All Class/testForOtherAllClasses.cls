@@ -40,4 +40,8 @@ public with sharing class testForOtherAllClasses {
         SOQLtestClassForCheck obj=new SOQLtestClassForCheck();
         obj.accountAndContactSOQLmethod();
     }
+    @isTest
+    public static void methodForPracticeclass(){
+        ForPracticeClassDemo.methodPractice();
+    }
 }

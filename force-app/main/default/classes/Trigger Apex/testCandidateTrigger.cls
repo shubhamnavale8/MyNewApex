@@ -34,6 +34,7 @@ public class testCandidateTrigger {
             }
             catch(DmlException ex){
                 System.debug('Beacuse of Expected Salary : '+ex.getMessage());
+                System.assertEquals(true, ex.getMessage().contains('Expected Salary field is missing'));
             }
         }
         List<Candidate_Shubham__c> checkObject=[select Id from Candidate_Shubham__c]; 

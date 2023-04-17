@@ -107,7 +107,7 @@ public class testAccountTrigger {
             oppObject.CloseDate=date.today();
             oppObject.Name='For Test';
             oppObject.AccountId=accountObject1.Id;
-            insert oppObject;
+            Database.insert(oppObject,false);
         }
         List<Account> withOppAndActiveCheck=[select Id,Name,Active__c from Account where Name Like 'ForActiveWithOpp%'];
         Database.delete(withOppAndActiveCheck,false);

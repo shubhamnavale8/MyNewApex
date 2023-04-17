@@ -1,7 +1,7 @@
 public with sharing class ForDataBaseAssignment {
     
     public void DatabaseInsertMethod(){
-        List<Book_Details__c> bookObject=new List<Book_Details__c>();
+       /* List<Book_Details__c> bookObject=new List<Book_Details__c>();
         Date myDate1 = date.newinstance(1960, 1, 1);
         Date myDate2 = date.newinstance(1966, 1, 1);
         bookObject.add(new Book_Details__c(Name='Salesforce',Date_Of_Publish__c=myDate2));
@@ -9,7 +9,7 @@ public with sharing class ForDataBaseAssignment {
         
         System.debug('----------------Database Assignment 1 Question-------------------- ');
         Database.SaveResult[] savebook=Database.insert(bookObject,false);
-       /*
+       
         for(Database.SaveResult s: savebook){
             if(s.isSuccess()){
                 System.debug('Record iS insert Successfully : '+s.getId());
@@ -25,9 +25,9 @@ public with sharing class ForDataBaseAssignment {
 
     }
     public void DatabaseUpdateMethod(){
-        List<Author__c> bookObject=new List<Author__c>();
+       /* List<Author__c> bookObject=new List<Author__c>();
         Author__c authorDObject=[select ID,Name,Email__c from Author__c where Name='Shubham Navale' ];
-        /*
+        
         authorDObject.Email__c='Shubham.navale8@gmail.com';
 
         Author__c authorDObject1=[select ID,Name,Email__c from Author__c where Name='Pratik Alhat' ];
