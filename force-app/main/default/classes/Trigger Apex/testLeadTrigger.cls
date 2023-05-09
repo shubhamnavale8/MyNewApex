@@ -1,5 +1,5 @@
 @istest
-public with sharing class testLeadTrigger {
+public  class testLeadTrigger {
     @testSetup
     public static void setupMethod(){
         List<Lead> leadObjectList=new List<Lead>();
@@ -30,7 +30,7 @@ public with sharing class testLeadTrigger {
             insert leadObjectTwo;
         }
         catch(DmlException ex){
-            System.assertEquals(false, ex.getMessage().contains('This User is Already Exist'));
+            System.assertEquals(true, ex.getMessage().contains('This User is Already Exist'));
         }
         
     }

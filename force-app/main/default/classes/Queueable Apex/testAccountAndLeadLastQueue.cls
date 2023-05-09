@@ -1,5 +1,7 @@
 @isTest
 public class testAccountAndLeadLastQueue {
+    @testSetup
+    public static void m1(){}
 	@isTest
     public static void testMethods(){
         List<Account> Teste = new List <Account>();
@@ -19,8 +21,9 @@ public class testAccountAndLeadLastQueue {
         }
         insert leadObjectList;
         
-         AddContactForAccountQueue AccountContAdd = new AddContactForAccountQueue(co);
+        
          Test.startTest();
+         AddContactForAccountQueue AccountContAdd = new AddContactForAccountQueue(co);
          System.enqueueJob(AccountContAdd);
          Test.stopTest();
 		 System.assertEquals(10, [select count() from Contact where accountID IN (SELECT id FROM Account)]);

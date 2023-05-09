@@ -47,6 +47,9 @@ public class testcandidateTriggerOfApplicant {
         List<Candidate_Shubham__c> canObject=[select Id , Job_Shubham__c, Name from Candidate_Shubham__c];
         System.debug('job id'+jobObject);
         System.debug('candidate := '+canObject);
-        System.assertEquals(false,jobObject.Active__c);
+        System.assertEquals(false,jobObject.Active__c); 
+        System.assertEquals(1, Limits.getEmailInvocations());
+        System.assertNotEquals(0, Limits.getEmailInvocations());
+        //System.assertEquals(true, HandlerForCandidateTrigger.candidateNumberMatchApplicant());
     }
 }

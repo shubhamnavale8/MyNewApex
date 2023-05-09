@@ -1,7 +1,7 @@
 public class HandlerForLeadTrigger {
-    public static void forAvoidEmailLastNameDateDuplication(List<Lead> leadObjectList){
+    //public static void forAvoidEmailLastNameDateDuplication(List<Lead> leadObjectList){
 
-        for(Lead leadObject:leadObjectList){
+        //for(Lead leadObject:leadObjectList){
            // List<Lead> oldLeadList=[select CreatedDate,Id, LastName, Email from Lead ];
 			//where (LastName=:leadObject.LastName And CreatedDate=:leadObject.CreatedDate) OR (Email=:leadObject.Email And CreatedDate=:leadObject.CreatedDate)
             //System.debug(oldLeadList+'pppppppppppppppppppp');
@@ -20,6 +20,6 @@ public class HandlerForLeadTrigger {
                    // }
                 //}
             
-        }
-    }
+//        }
+//    }
 }

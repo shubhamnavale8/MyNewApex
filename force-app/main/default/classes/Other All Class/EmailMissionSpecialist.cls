@@ -1,6 +1,6 @@
 public class EmailMissionSpecialist {
      // Public method
-     public void sendMail(String address, String subject, String body) {
+     public Boolean sendMail(String address, String subject, String body) {
      // Create an email message object
         Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
         String[] toAddresses = new String[] {address};
@@ -12,10 +12,10 @@ public class EmailMissionSpecialist {
      Messaging.SendEmailResult[] results = Messaging.sendEmail(
      new Messaging.SingleEmailMessage[] { mail });
      // Call a helper method to inspect the returned results
-     inspectResults(results);
+     return inspectResults(results);
      }
      // Helper method
-     private static Boolean inspectResults(Messaging.SendEmailResult[] results) {
+     public static Boolean inspectResults(Messaging.SendEmailResult[] results) {
      Boolean sendResult = true;
      // sendEmail returns an array of result objects.
      // Iterate through the list to inspect results. 

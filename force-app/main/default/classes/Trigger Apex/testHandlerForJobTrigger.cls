@@ -32,15 +32,15 @@ public class testHandlerForJobTrigger {
         List<Contact> contactObject=new List<Contact>();
         for(Integer itrcandidate=0; itrcandidate<7; itrcandidate++){
             try{
-            Candidate_Shubham__c candidateObject=new Candidate_Shubham__c();
-            candidateObject.Job_Shubham__c=jobObjectId.Id;
-            candidateObject.Name='Empolyee_'+itrcandidate;
-            candidateObject.First_Name__c='Shubham_Test_'+itrcandidate;
-            candidateObject.Last_Name__c='Navale_Test_'+itrcandidate;
-            candidateObject.Application_Date__c=date.newInstance(2023, 8, 4);
-            candidateObject.Expected_Salary__c=60000;
-            //candiObject.add(candidateObject);
-            insert candidateObject;
+                Candidate_Shubham__c candidateObject=new Candidate_Shubham__c();
+                candidateObject.Job_Shubham__c=jobObjectId.Id;
+                candidateObject.Name='Empolyee_'+itrcandidate;
+                candidateObject.First_Name__c='Shubham_Test_'+itrcandidate;
+                candidateObject.Last_Name__c='Navale_Test_'+itrcandidate;
+                candidateObject.Application_Date__c=date.newInstance(2023, 8, 4);
+                candidateObject.Expected_Salary__c=60000;
+                //candiObject.add(candidateObject);
+                insert candidateObject;
             }
             catch(DmlException ex){
                 System.debug('Job is now DeActive so error Occur : '+ex.getMessage());

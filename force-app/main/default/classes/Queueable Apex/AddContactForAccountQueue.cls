@@ -1,20 +1,28 @@
-public class AddContactForAccountQueue implements Queueable {
+global class AddContactForAccountQueue implements Queueable {
+    global static Integer count=0;
 	private Contact c;
-    public AddContactForAccountQueue(Contact c){
+    global AddContactForAccountQueue(Contact c){
         this.c = c;
     }
-    public void execute(QueueableContext context){
-         List<Account> ListAccount = [SELECT ID, Name ,(Select id,FirstName,LastName from contacts ) FROM ACCOUNT];
+    global void execute(QueueableContext context){
+         List<Account> ListAccount = [SELECT ID, Name ,(Select id,FirstName,LastName from contacts ) FROM ACCOUNT limit 100];
          List<Contact> lstContact = new List<Contact>();
          for(Account acc:ListAccount){
              Contact cont = c.clone(false,false,false,false);
              cont.AccountId =  acc.id;
              lstContact.add( cont );
          }
+         count++;
+
          if(lstContact.size() >0 ){
              insert lstContact;
          }
-        //System.AsyncException: Maximum stack depth has been reached.
-        //System.enqueueJob(new LeadSourceUpdateQueue());
+         if(count==1){
+            // System.AsyncException: Maximum stack depth has been reached.
+           // System.enqueueJob(new LeadSourceUpdateQueue());
+           //
+         }
+
+       
     }
 }

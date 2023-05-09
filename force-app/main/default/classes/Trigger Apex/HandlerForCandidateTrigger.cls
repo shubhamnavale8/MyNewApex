@@ -23,6 +23,10 @@ public class HandlerForCandidateTrigger {
                 temp.Application_Date__c = Date.newInstance(candidateObj.CreatedDate.year(), candidateObj.CreatedDate.month(), candidateObj.CreatedDate.day());
                 candidateList.add(temp);
 				*/
+                /* 
+                Candidate_Shubham__c cloneObject = candidateObj.clone(true,true,true,true);
+                cloneObject.Application_Date__c = candidateObj.CreatedDate.date();
+                */
                 Candidate_Shubham__c cloneObject = candidateObj.clone(true,true,true,true);
                 DateTime createdDateTime = cloneObject.CreatedDate;
         		String createdDateString = createdDateTime.format('yyyy-MM-dd');
@@ -33,7 +37,8 @@ public class HandlerForCandidateTrigger {
             Database.update(candidateList);
             //update candidateList;
     }
-    public static void candidateNumberMatchApplicant(List<Candidate_Shubham__c> candidateObjectList ){
+    public static Boolean candidateNumberMatchApplicant(List<Candidate_Shubham__c> candidateObjectList ){
+        Boolean EmailSendcheck=false;
 		List<Job_Shubham__c> jobListObject=new List<Job_Shubham__c>();
         for(Candidate_Shubham__c obj : candidateObjectList){
            Job_Shubham__c jobObjects=[select Id,Manager__c,LastModifiedDate , Total_position__c, Hired_Applicants__c,Active__c from Job_Shubham__c where Id =:obj.Job_Shubham__c];
@@ -43,11 +48,13 @@ public class HandlerForCandidateTrigger {
                 List<Contact> contactList=[select Id, Email from Contact where Id=:jobObjects.Manager__c];
                 for(Contact contactObject:contactList){
                     EmailMissionSpecialist emailspl = new EmailMissionSpecialist();
-                	emailspl.sendMail(contactObject.Email,'Application is Full','All required candidate has been hired for this job on Job Last Modified Date '+jobObjects.LastModifiedDate);
+                	EmailSendcheck=emailspl.sendMail(contactObject.Email,'Application is Full','All required candidate has been hired for this job on Job Last Modified Date '+jobObjects.LastModifiedDate);   
                 }
             	jobListObject.add(jobObjects);
             }
+            
         }
         Database.update(jobListObject,false);
+        return EmailSendcheck;
     }
 }
