@@ -10,30 +10,34 @@ public with sharing class HandlerAccountTrigger {
             a.ShippingStreet = a.BillingStreet;          
         }    
     }
-    public static void changeFieldMethodOnetoAnother(List<Account> accountObjectNew,List<Account> accountObjectOld){
-        for(Account accountObject : accountObjectNew){
-            if(accountObject.Industry=='Finance'){
-                for(Account accountObject1 : accountObjectOld){
-                    if((accountObject.Id==accountObject1.Id) && (accountObject1.Industry=='Engineering')){
-                        accountObject.Active__C=true;
-                    }
-                }
+    //----------------------------------------done-----------------------------------------
+    public static void changeFieldMethodOnetoAnother(List<Account> accountObjectNew,Map<Id,Account>oldMap){
+        for(Account account: accountObjectNew){
+            if( account.Industry == 'Finance' && oldMap.get(account.Id).Industry=='Engineering'){
+                account.Active__c=true;
+                System.debug('Trigger fired');
             }
         }
     }
-    public static void priventFromDeletMethod(List<Account> oldAccountObject){
-
-            for(Account accountObjectForDelete: oldAccountObject){
-                 List<Opportunity> opportunityObject =[select Id from opportunity where AccountId =:accountObjectForDelete.Id];
-                 if(accountObjectForDelete.Active__c==true){
-                    accountObjectForDelete.Active__c.addError('You cant delete a record because its in active state');
-                 }else if(opportunityObject.size()>0  ){
-                    accountObjectForDelete.Id.addError('You cant delete a record because Opportunity Records are associated with This Account ');
-                 }
-            }
+    //-----------------------------------------done------------------------------------------------------
+    public static void priventFromDeletMethod(List<Account> listAccountObjectOld,Map<Id,Account> mapAccountsOld){
+   		Set<Id> setAccountIds=mapAccountsOld.keySet();
+		List<Opportunity> listOpportunities =[select Id from opportunity where AccountId =:setAccountIds];
+        Map<Id,Opportunity> mapOpportunities=new Map<Id,Opportunity>(); 
+        for(Opportunity opportunityObject:listOpportunities){
+            mapOpportunities.put(opportunityObject.AccountId,opportunityObject);
+        }
+        for(Account accountObjectForDelete: listAccountObjectOld){         
+              if(accountObjectForDelete.Active__c==true){
+                 accountObjectForDelete.Active__c.addError('You cant delete a record because its in active state');
+              }else if(mapOpportunities.get(accountObjectForDelete.Id)!=null  ){
+                 accountObjectForDelete.Id.addError('You cant delete a record because Opportunity Records are associated with This Account ');
+              }
+         }
     }
+    //---------------------------------------done-----------------------------------------------------
     public static void taskCreatedForActivityMethod(List<Account> accountObjectForNewRecord){
-       
+       List<Task> listTasks=new List<Task>();
         for(Account acoountObject: accountObjectForNewRecord){
             if(acoountObject.AnnualRevenue>50000){
                 Date myDate1=date.newInstance(2023, 5, 5);
@@ -42,35 +46,46 @@ public with sharing class HandlerAccountTrigger {
                 newTaskCreate.WhatId=acoountObject.Id;
                 newTaskCreate.ActivityDate=myDate1;
                 newTaskCreate.Status='In Progress';
-                insert newTaskCreate;
-            }  
+                listTasks.add(newTaskCreate);
+            }      
         }
+        insert listTasks;
     }
-    public static void phoneOfAccountUpdateWithContactMethod(List<Account> oldAccountList,List<Account> accountObjectForUpdate){
-        for(Account accountObject: accountObjectForUpdate){
-            List<Contact> contactObject=[select Id,Phone,AccountId from Contact WHERE AccountId=:accountObject.Id];
-            List<Contact> forUpdateListContact=new List<Contact>();
-            for(Account olaAccnt: oldAccountList){
-                 if(accountObject.Phone!=olaAccnt.Phone){
-                    for(Contact c : contactObject){
-                        c.Phone = accountObject.Phone;
-                        c.OtherPhone = olaAccnt.Phone;
-                        c.HomePhone = accountObject.Phone;
-                        forUpdateListContact.add(c);
-                    }
-                 }
-            }
-            Database.update(forUpdateListContact);
-        }
+ //-------------------------------------------------done-----------------------------------------------------------   
+    public static void phoneOfAccountUpdateWithContactMethod(Map<Id,Account> accountNewMap, Map<Id,Account> accountOldMap){
+        List<Contact> listContacts = [Select id,FirstName,LastName,AccountId from contact];
+        List<Contact> listContactsUpdate=new List<Contact>();
+         for(Contact contacts : listContacts){
+             Account newAccount = accountNewMap.get(contacts.AccountId);
+             Account oldAccount = accountOldMap.get(contacts.AccountId); 
+             if(newAccount != null && oldAccount != null){
+                 if(((newAccount.Phone != '' && oldAccount.Phone !='') && (newAccount.Phone!=null && oldAccount.Phone!=null)) || ((newAccount.Phone != '' && newAccount.Phone!=null) && (oldAccount.Phone =='' || oldAccount.Phone==null))){
+                     if(newAccount.Phone != oldAccount.Phone){
+                        contacts.Phone = newAccount.Phone;
+                 		contacts.OtherPhone = oldAccount.Phone;
+                 		contacts.HomePhone = newAccount.Phone;
+                        listContactsUpdate.add(contacts);
+                     }
+                 }        
+             }
+         }
+        Database.update(listContactsUpdate);
     }
-    public static void sendMailforDeletedAccountMethod(List<Account> oldAccountList){
-        for(Account accountObject: oldAccountList){
-            List<Contact> contactList=[select Id,Email,AccountId from Contact WHERE AccountId=:accountObject.Id];
-            for(Contact contactObject : contactList){
-                EmailMissionSpecialist emailspl = new EmailMissionSpecialist();
-                System.debug(contactObject.Email+'cccccccccccccccccccccccccccccc');
-                emailspl.sendMail(contactObject.Email,'Account Deletion','Dear User, Your Account Has been deleted.');
-            }
+    //-------------------------------incompleted--------------------------------------
+    public static void sendMailforDeletedAccountMethod(Map<Id,Account> accountMap){
+        List<Contact> contactsList = [Select Id, AccountId, Email from Contact];
+        List<Messaging.SingleEmailMessage> emails=new List<Messaging.SingleEmailMessage>();
+        List<String> emailList=new List<String>();
+        for(Contact iContact : contactsList){
+            Account acc = accountMap.get(iContact.AccountId);
+            if(acc != null){
+                if(iContact.Email != null && iContact.Email != ''){
+                    EmailMissionSpecialist newEmail = new EmailMissionSpecialist();
+                    String subject = 'Account Deletion notification';
+                    String body = 'Your contact related Account is been deleted';
+                    newEmail.sendMail(iContact.Email, subject, body);
+                }
+            }    
         }
     }
 }

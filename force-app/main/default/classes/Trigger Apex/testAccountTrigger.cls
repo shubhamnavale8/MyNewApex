@@ -168,15 +168,17 @@ public class testAccountTrigger {
         }
         Database.insert(contactNew);
         List<Account> oldAccountListForResult=[select Id,Name,Phone from Account ];
+        System.debug('oldAccountListForResult'+oldAccountListForResult);
         List<Account> oldAccountList=[select Id,Name,Phone from Account ];
+        System.debug('oldAccountList'+oldAccountList);
         List<Account> newAccountList=new List<Account>();
 
         for(Account accountObjectFor: oldAccountList){
-            accountObjectFor.Phone=accountObjectFor.Phone+20;
+            accountObjectFor.Phone=accountObjectFor.Phone+2;
             newAccountList.add(accountObjectFor);
-            update accountObjectFor;
+            //update accountObjectFor;
         }
-       // Database.update(newAccountList);
+        Database.update(newAccountList);
         
         List<Account> newAccountList1=[select Id,Name,Phone from Account];
         for(Account accountObject: newAccountList1){

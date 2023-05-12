@@ -4,22 +4,27 @@ trigger AccountTrigger on Account (before insert,before update,before delete,aft
         System.debug(Trigger.new);
     }
     if(Trigger.isAfter && Trigger.isInsert){
+        
         HandlerAccountTrigger.taskCreatedForActivityMethod(Trigger.new);
-        System.debug(Trigger.new);
-    }
-    if(Trigger.isBefore&& Trigger.isUpdate){
-        HandlerAccountTrigger.changeFieldMethodOnetoAnother(Trigger.new,Trigger.old);
         System.debug(Trigger.new);
         
     }
+    if(Trigger.isBefore&& Trigger.isUpdate){
+        
+        HandlerAccountTrigger.changeFieldMethodOnetoAnother(Trigger.new,Trigger.oldMap);
+        System.debug(Trigger.new);
+        
+       
+        
+    }
     if(Trigger.isAfter && Trigger.isUpdate){
-        HandlerAccountTrigger.phoneOfAccountUpdateWithContactMethod(trigger.old,Trigger.new);
+        HandlerAccountTrigger.phoneOfAccountUpdateWithContactMethod(Trigger.newMap,Trigger.oldMap);
         System.debug(Trigger.new);
         
     }
     if(Trigger.isBefore && Trigger.isDelete){
-        HandlerAccountTrigger.priventFromDeletMethod(Trigger.old); 
-        HandlerAccountTrigger.sendMailforDeletedAccountMethod(Trigger.old); 
+        HandlerAccountTrigger.priventFromDeletMethod(Trigger.old,Trigger.oldMap); 
+        HandlerAccountTrigger.sendMailforDeletedAccountMethod(Trigger.oldMap); 
         System.debug(Trigger.old); 
     }
    
